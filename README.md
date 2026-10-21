@@ -2,6 +2,14 @@
 
 面向投资 Agent 的产品经理、模型运营与质量审查人员，提供问答导入、自动检查、事实核验、人工复核、反馈归因、版本回归的可运行工作台。默认内置 12 条匿名构造样本和两版预置回答。
 
+## 在线访问与部署状态
+
+产品地址：[AgentLens](https://agentlens-quality-platform.xcxufo0120.workers.dev/)。源码仓库：[XCXUFO/tonghuashun1](https://github.com/XCXUFO/tonghuashun1)。
+
+2026-10-21 已通过 Cloudflare Workers Builds 完成首次构建和发布。DeepSeek、扶摇、iFinD 三项运行时配置已存为 Secret，后台显示 Value encrypted。全站生产和预览网址均启用 Cloudflare Access，仅此 Cloudflare 账户成员可访问。
+
+部署成功与实际访问验收分开记录：平台 HTTP 测试已收到访问保护的 302 登录跳转；当前测试网络访问 workers.dev 超时，尚未完成公开网址登录后的 UI 操作、线上模型及金融数据调用验收。提交评审前需确认评审网络能够访问，并配置评审访问权限。不要将当前私有链接描述为任何人均可直接操作。
+
 ## 目标用户和核心设计
 
 Agent 出现错误时，先定位回答中的可计算断言和证据缺口，再判断是数据、生成、意图理解、画像使用还是规则误报。规则结果、模型意见、人工结论独立保存。
@@ -27,7 +35,7 @@ pnpm exec tsc --noEmit
 pnpm build
 ```
 
-线上采用 Sites / Cloudflare Workers。线上环境变量需配置为服务端 secret，不能把 `.dev.vars` 上传为普通源码。构建产物在 dist/，源码 Site 身份与配置在 .openai/hosting.json。
+线上采用 Cloudflare Workers，连接本仓库 main 分支自动构建。构建命令为 `pnpm install --no-frozen-lockfile && pnpm run build`，部署命令为 `pnpm exec wrangler deploy --config dist/server/wrangler.json`；构建变量 NODE_VERSION=24、PNPM_VERSION=11.25.0。线上密钥配置为运行时 Secret，不能把 `.dev.vars` 上传为普通源码。构建产物在 dist/，仓库保留原 Sites 兼容配置。
 
 ## 环境变量
 
@@ -38,7 +46,7 @@ pnpm build
 | FUYAO_API_KEY | 扶摇数据请求头 X-api-key | 数据核验显示待授权，不生成正常结果 |
 | IFIND_MCP_KEY | iFinD A 股行情 MCP，服务地址按官方技能内置 | 未配置时显示待授权 |
 
-密钥不通过浏览器表单上传、不进入浏览器包、日志或导出文件。`/api/config` 只返回是否配置，不返回任何密钥内容。
+密钥不通过产品页面收集，不进入产品浏览器包、日志或导出文件；部署者在托管平台后台配置运行时 Secret。`/api/config` 只返回是否配置，不返回任何密钥内容。
 
 ## AI 的角色
 
@@ -84,6 +92,6 @@ pnpm build
 - 当前模型辅助审查不包含独立模型复核、人工一致性统计或大规模准确率验证。
 - 数据有效期由样本设置，默认行情 24 小时、年度财务 8760 小时，暂未按交易日历、停牌与盘中场景细分。过期检查采用保守策略。
 - 没有基金全链路核验、新闻公告原文抓取、iFinD 新闻公告与财务工具调用、实时流与跨币种转换。
-- 默认新 Site 私有，需要拥有者登录；提交给评审前须设置合适的访问权限。私有源码仓库也需另行提供评审可读入口。
+- 生产网站通过 Cloudflare Access 限制为该账户成员访问；提交评审前须配置适合评审的访问方式，并完成外部网络和线上接口验收。
 
 参见 [测试与验证](docs/TESTING.md)、[AI 使用记录](docs/AI_USAGE.md)、[演示分镜](docs/DEMO.md)。
