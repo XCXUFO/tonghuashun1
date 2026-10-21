@@ -1,0 +1,9 @@
+export type Intent = '行情查询' | '财务解读' | '知识解释' | '热点分析' | '个性化问答';
+export type Claim = { field: string; label: string; value: number; unit: string; quote: string; period?: string };
+export type Evidence = { id: string; source: string; sourceUrl: string; asOf: string; retrievedAt: string; requestId: string; fields: Record<string, number | null>; units: Record<string, string>; period?: string; thscode?: string; fixture: boolean; raw?: unknown; error?: string };
+export type Version = { id: string; label: string; model: string; prompt: string; data: string; answer: string; claims: Claim[]; privacyDetected?: boolean };
+export type Sample = { id: string; title: string; intent: Intent; question: string; thscode: string; kyc: { id: string; experience: string; risk: string; horizon: string }; context: { text: string; source: string; asOf: string; verified: boolean }; versions: Version[]; evidence: Evidence[]; feedback: { kind: string; text: string }; reference: string; expectedTerms?: string[]; maxAgeHours: number; pairId?: string };
+export type Finding = { id: string; severity: 'P0' | 'P1' | 'P2'; category: string; title: string; detail: string; quote: string; origin: '规则' | '数值核验' | 'AI建议'; field?: string };
+export type ClaimCheck = { claim: Claim; status: 'match' | 'mismatch' | 'missing' | 'stale' | 'conflict' | 'incomparable'; actual?: number; detail: string; evidenceIds: string[] };
+export type Evaluation = { id: string; sampleId: string; versionId: string; at: string; status: 'blocked' | 'review' | 'pending' | 'pass'; findings: Finding[]; claims: ClaimCheck[]; coverage: number | null; accuracy: number | null; semantic: { status: 'unassessed' | 'complete' | 'failed'; model?: string; relevance?: number; explanation: string }; evaluator: string };
+export type Review = { verdict: '确认问题' | '规则误报' | '待补证据' | '人工通过'; cause: string; note: string; at: string; evaluationId: string };
