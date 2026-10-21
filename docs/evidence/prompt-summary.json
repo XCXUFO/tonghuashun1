@@ -1,0 +1,56 @@
+{
+  "scope": "3 题每题 2 个审查 Prompt 的一次性真实修订实验；匿名构造输入；非整体质量或显著性证明",
+  "runs": [
+    {
+      "sampleId": "QA-001",
+      "arms": [
+        {
+          "prompt": "invest-v1",
+          "extractedClaims": 2,
+          "matchedClaims": 2,
+          "deterministicFindings": 0
+        },
+        {
+          "prompt": "invest-v2-evidence",
+          "extractedClaims": 2,
+          "matchedClaims": 2,
+          "deterministicFindings": 0
+        }
+      ]
+    },
+    {
+      "sampleId": "QA-004",
+      "arms": [
+        {
+          "prompt": "invest-v1",
+          "extractedClaims": 2,
+          "matchedClaims": 2,
+          "deterministicFindings": 1
+        },
+        {
+          "prompt": "invest-v2-evidence",
+          "extractedClaims": 2,
+          "matchedClaims": 2,
+          "deterministicFindings": 0
+        }
+      ]
+    },
+    {
+      "sampleId": "QA-007",
+      "arms": [
+        {
+          "prompt": "invest-v1",
+          "extractedClaims": 2,
+          "matchedClaims": 2,
+          "deterministicFindings": 0
+        },
+        {
+          "prompt": "invest-v2-evidence",
+          "extractedClaims": 2,
+          "matchedClaims": 2,
+          "deterministicFindings": 0
+        }
+      ]
+    }
+  ]
+}

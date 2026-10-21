@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluate, numericCheck, redact, summarize, normalizeDraftClaims } from '../lib/engine.ts';
+import { evaluate, numericCheck, redact, redactValue, summarize, normalizeDraftClaims } from '../lib/engine.ts';
 import { SAMPLES, REPLAY_TIME } from '../lib/samples.ts';
 import { fetchFuyao } from '../lib/providers.ts';
 const get = id => structuredClone(SAMPLES.find(s => s.id === id));
@@ -32,3 +32,5 @@ test('扶摇限流响应明确归类', async () => { await assert.rejects(fetchF
 test('扶摇原始字段和请求 ID 保留', async () => { const e = await fetchFuyao('test', '600519.SH', 'quote', async () => Response.json({ code: 0, request_id: 'test-123', data: { timestamp: Date.parse(REPLAY_TIME), item: [{ thscode: '600519.SH', last_price: 1280 }] } })); assert.equal(e.fixture, false); assert.equal(e.requestId, 'test-123'); assert.equal(e.fields.last_price, 1280); assert.ok(e.raw); });
 test('扶摇缺数据时间拒绝作为有效证据', async () => { await assert.rejects(fetchFuyao('test', '600519.SH', 'quote', async () => Response.json({ code: 0, data: { item: [{ thscode: '600519.SH', last_price: 1280 }] } })), e => e.code === 'MISSING_TIME'); });
 test('数据请求没有密钥不发出外部请求', async () => { let called = false; await assert.rejects(fetchFuyao('', '600519.SH', 'quote', async () => { called = true; }), e => e.code === 'NOT_CONFIGURED'); assert.equal(called, false); });
+
+test('结构化脱敏不改变大额财务数值且导出保持合法 JSON', () => { const data = { operating_income: 13800138000, nested: { note: '电话13800138000' }, list: ['test@example.com', 13800138000] }; const safe = redactValue(data); assert.equal(safe.operating_income, 13800138000); assert.equal(safe.nested.note, '电话[手机号已脱敏]'); assert.equal(safe.list[0], '[邮箱已脱敏]'); assert.equal(JSON.parse(JSON.stringify(safe)).list[1], 13800138000); assert.equal(data.nested.note, '电话13800138000'); });

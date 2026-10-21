@@ -1,5 +1,5 @@
 import type { Evidence } from './domain';
-import { DataError } from './providers';
+import { DataError } from './providers.ts';
 const STOCK_URL = 'https://api-mcp.51ifind.com:8643/ds-mcp-servers/hexin-ifind-ds-stock-mcp';
 type Rpc = { error?: unknown; result?: { tools?: { name: string }[]; isError?: boolean; content?: { type: string; text?: string }[] } };
 export async function fetchIfindQuote(key: string, thscode: string): Promise<Evidence> {

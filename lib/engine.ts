@@ -8,6 +8,13 @@ const scale: Record<string, number> = { '元': 1, '万元': 1e4, '亿元': 1e8, 
 export function redact(text: string): string {
   return text.replace(/\b1[3-9]\d{9}\b/g, '[手机号已脱敏]').replace(/\b\d{17}[\dXx]\b/g, '[证件号已脱敏]').replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[邮箱已脱敏]').replace(/\b(?:sk-|art_v2_)[A-Za-z0-9_-]{10,}\b/g, '[密钥已脱敏]');
 }
+// 只对字符串值脱敏，避免把大额财务数字误替换成文本、破坏 JSON。
+export function redactValue<T>(value: T): T {
+  if (typeof value === 'string') return redact(value) as T;
+  if (Array.isArray(value)) return value.map(item => redactValue(item)) as T;
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, redactValue(item)])) as T;
+  return value;
+}
 export function numericCheck(claim: Version['claims'][number], evidences: Evidence[], at: string, maxAgeHours: number): ClaimCheck {
   if (!Number.isFinite(claim.value)) return { claim, evidenceIds: [], status: 'incomparable', detail: '回答值不是有限数字。' };
   if (evidences.some(e => e.period && e.fields[claim.field] != null) && !claim.period) return { claim, evidenceIds: [], status: 'incomparable', detail: '财务断言未指定报告期，不能与任意年度数据直接比较。' };

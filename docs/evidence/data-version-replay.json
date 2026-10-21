@@ -1,0 +1,285 @@
+{
+  "scope": "构造数据的时效回归，仅修改数据快照，绝非真实行情刷新",
+  "sample": {
+    "id": "QA-002",
+    "title": "旧快照被当作当前行情",
+    "intent": "行情查询",
+    "question": "现在的最新价格是多少？",
+    "thscode": "600519.SH",
+    "kyc": {
+      "id": "ANON-001",
+      "experience": "新手",
+      "risk": "保守型",
+      "horizon": "1–3 年"
+    },
+    "context": {
+      "text": "无关联热点",
+      "source": "匿名构造日志",
+      "asOf": "2026-10-21T07:00:00.000Z",
+      "verified": false
+    },
+    "versions": [
+      {
+        "id": "baseline",
+        "label": "基线版本",
+        "model": "deepseek-chat（样本标签）",
+        "prompt": "invest-v1",
+        "data": "fixture-data-v1",
+        "answer": "最新成交价为 1280 元。",
+        "claims": [
+          {
+            "field": "last_price",
+            "label": "最新成交价",
+            "value": 1280,
+            "unit": "元",
+            "quote": "最新成交价为 1280 元"
+          }
+        ]
+      },
+      {
+        "id": "candidate",
+        "label": "候选版本",
+        "model": "deepseek-chat（样本标签）",
+        "prompt": "invest-v2-evidence",
+        "data": "fixture-data-v1",
+        "answer": "当前仅有过期快照，无法确认最新价格；需要重新获取行情。",
+        "claims": []
+      }
+    ],
+    "evidence": [
+      {
+        "id": "fixture-quote-01",
+        "thscode": "600519.SH",
+        "source": "构造行情快照 · data-v1",
+        "sourceUrl": "https://fuyao.aicubes.cn/docs/api-reference/prices/",
+        "asOf": "2026-09-01T07:00:00Z",
+        "retrievedAt": "2026-10-21T07:00:00.000Z",
+        "requestId": "fixture-request-001",
+        "fields": {
+          "last_price": 1280
+        },
+        "units": {
+          "last_price": "元",
+          "price_change_ratio_pct": "%",
+          "operating_income": "元"
+        },
+        "fixture": true
+      }
+    ],
+    "feedback": {
+      "kind": "无反馈",
+      "text": ""
+    },
+    "reference": "构造评测样本；公司代码只用于演示接口，不代表真实行情或投资结论。",
+    "maxAgeHours": 24
+  },
+  "at": "2026-10-21T08:00:00.000Z",
+  "stale": {
+    "id": "QA-002-baseline-326d6d05",
+    "sampleId": "QA-002",
+    "versionId": "baseline",
+    "at": "2026-10-21T08:00:00.000Z",
+    "status": "pending",
+    "findings": [
+      {
+        "id": "f-1",
+        "severity": "P2",
+        "category": "时效过期",
+        "title": "最新成交价 · 无法确认",
+        "detail": "证据时间缺失、晚于评测时间或超出本任务有效期；不能作为当前事实。",
+        "quote": "最新成交价为 1280 元",
+        "origin": "数值核验",
+        "field": "last_price"
+      }
+    ],
+    "claims": [
+      {
+        "claim": {
+          "field": "last_price",
+          "label": "最新成交价",
+          "value": 1280,
+          "unit": "元",
+          "quote": "最新成交价为 1280 元"
+        },
+        "evidenceIds": [
+          "fixture-quote-01"
+        ],
+        "status": "stale",
+        "detail": "证据时间缺失、晚于评测时间或超出本任务有效期；不能作为当前事实。"
+      }
+    ],
+    "coverage": 0,
+    "accuracy": null,
+    "semantic": {
+      "status": "unassessed",
+      "explanation": "语义质量尚未由模型或人工审查；规则未命中不等于回答合格。"
+    },
+    "evaluator": "rules-1.0.0"
+  },
+  "refreshedEvidence": [
+    {
+      "id": "fixture-quote-01-synthetic-refreshed",
+      "thscode": "600519.SH",
+      "source": "构造行情快照 · data-v1",
+      "sourceUrl": "https://fuyao.aicubes.cn/docs/api-reference/prices/",
+      "asOf": "2026-10-21T08:00:00.000Z",
+      "retrievedAt": "2026-10-21T08:00:00.000Z",
+      "requestId": "fixture-request-001",
+      "fields": {
+        "last_price": 1280
+      },
+      "units": {
+        "last_price": "元",
+        "price_change_ratio_pct": "%",
+        "operating_income": "元"
+      },
+      "fixture": true
+    }
+  ],
+  "refreshed": {
+    "id": "QA-002-baseline-7552bf3a",
+    "sampleId": "QA-002",
+    "versionId": "baseline",
+    "at": "2026-10-21T08:00:00.000Z",
+    "status": "review",
+    "findings": [],
+    "claims": [
+      {
+        "claim": {
+          "field": "last_price",
+          "label": "最新成交价",
+          "value": 1280,
+          "unit": "元",
+          "quote": "最新成交价为 1280 元"
+        },
+        "evidenceIds": [
+          "fixture-quote-01-synthetic-refreshed"
+        ],
+        "actual": 1280,
+        "status": "match",
+        "detail": "回答 1280 元；证据 1280 元。容差为 0.01 回答单位或证据值的 0.01%，取较大者。"
+      }
+    ],
+    "coverage": 1,
+    "accuracy": 1,
+    "semantic": {
+      "status": "unassessed",
+      "explanation": "语义质量尚未由模型或人工审查；规则未命中不等于回答合格。"
+    },
+    "evaluator": "rules-1.0.0"
+  },
+  "interfaceFailure": {
+    "sample": {
+      "id": "QA-003",
+      "title": "接口缺失时编造数字",
+      "intent": "行情查询",
+      "question": "查一下最新成交价。",
+      "thscode": "600519.SH",
+      "kyc": {
+        "id": "ANON-001",
+        "experience": "新手",
+        "risk": "保守型",
+        "horizon": "1–3 年"
+      },
+      "context": {
+        "text": "无关联热点",
+        "source": "匿名构造日志",
+        "asOf": "2026-10-21T07:00:00.000Z",
+        "verified": false
+      },
+      "versions": [
+        {
+          "id": "baseline",
+          "label": "基线版本",
+          "model": "deepseek-chat（样本标签）",
+          "prompt": "invest-v1",
+          "data": "fixture-data-v1",
+          "answer": "最新成交价为 1280 元。",
+          "claims": [
+            {
+              "field": "last_price",
+              "label": "最新成交价",
+              "value": 1280,
+              "unit": "元",
+              "quote": "最新成交价为 1280 元"
+            }
+          ]
+        },
+        {
+          "id": "candidate",
+          "label": "候选版本",
+          "model": "deepseek-chat（样本标签）",
+          "prompt": "invest-v2-evidence",
+          "data": "fixture-data-v1",
+          "answer": "数据接口当前未返回有效行情，我无法确认最新成交价，请稍后重试。",
+          "claims": []
+        }
+      ],
+      "evidence": [
+        {
+          "id": "fixture-quote-01",
+          "thscode": "600519.SH",
+          "source": "构造行情快照 · data-v1",
+          "sourceUrl": "https://fuyao.aicubes.cn/docs/api-reference/prices/",
+          "asOf": "2026-10-21T07:00:00.000Z",
+          "retrievedAt": "2026-10-21T07:00:00.000Z",
+          "requestId": "fixture-request-001",
+          "fields": {},
+          "units": {
+            "last_price": "元",
+            "price_change_ratio_pct": "%",
+            "operating_income": "元"
+          },
+          "fixture": true,
+          "error": "3002 数据未就绪"
+        }
+      ],
+      "feedback": {
+        "kind": "无反馈",
+        "text": ""
+      },
+      "reference": "构造评测样本；公司代码只用于演示接口，不代表真实行情或投资结论。",
+      "maxAgeHours": 24
+    },
+    "evaluation": {
+      "id": "QA-003-baseline-716c6cc6",
+      "sampleId": "QA-003",
+      "versionId": "baseline",
+      "at": "2026-10-21T08:00:00.000Z",
+      "status": "pending",
+      "findings": [
+        {
+          "id": "f-1",
+          "severity": "P2",
+          "category": "证据不足",
+          "title": "最新成交价 · 无法确认",
+          "detail": "未取得同字段、同报告期的有效证据，不能判定数字正确。",
+          "quote": "最新成交价为 1280 元",
+          "origin": "数值核验",
+          "field": "last_price"
+        }
+      ],
+      "claims": [
+        {
+          "claim": {
+            "field": "last_price",
+            "label": "最新成交价",
+            "value": 1280,
+            "unit": "元",
+            "quote": "最新成交价为 1280 元"
+          },
+          "evidenceIds": [],
+          "status": "missing",
+          "detail": "未取得同字段、同报告期的有效证据，不能判定数字正确。"
+        }
+      ],
+      "coverage": 0,
+      "accuracy": null,
+      "semantic": {
+        "status": "unassessed",
+        "explanation": "语义质量尚未由模型或人工审查；规则未命中不等于回答合格。"
+      },
+      "evaluator": "rules-1.0.0"
+    }
+  }
+}
