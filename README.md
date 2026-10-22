@@ -6,11 +6,11 @@
 
 产品地址：[AgentLens](https://agentlens-quality-platform.xcxufo0120.workers.dev/)。源码仓库：[XCXUFO/tonghuashun1](https://github.com/XCXUFO/tonghuashun1)。
 
-2026-10-21 已通过 Cloudflare Workers Builds 完成首次构建和发布。DeepSeek、扶摇、iFinD 三项运行时配置已存为 Secret，后台显示 Value encrypted。全站生产和预览网址均启用 Cloudflare Access，仅此 Cloudflare 账户成员可访问。
+2026-10-21 已通过 Cloudflare Workers Builds 完成首次构建和发布。DeepSeek、扶摇、iFinD 三项运行时配置已存为 Secret，后台显示 Value encrypted。2026-10-22 经用户确认，已添加 Everyone → Bypass 公开演示策略，生产和预览网址无需登录即可访问；Cloudflare 管理后台和服务端 Secret 不公开。已用不带 Cookie/凭证的 HTTP 请求验证首页与配置接口返回 200。
 
 线上已实际验收：Cloudflare Access 登录、质量概览、评测工作台、DeepSeek 语义评测与草稿另存复评、测试复核记录保存、版本对比和刷新恢复；扶摇行情请求成功。模型请求别名 deepseek-chat，服务实际返回 deepseek-flash。复核测试备注明确标注由 AI 操作，不代表候选人正式人工审查。
 
-iFinD 本地调用成功，但本次 Cloudflare 线上验收返回 IFIND_HTTP_530；根因尚未确认，页面明确提示没有可用证据。线上主链路使用扶摇，不能将 iFinD 描述为线上已连通。初次访问曾超时，随后重试及用户实际网络均已打开产品；提交评审前仍需确认评审网络能够访问，并配置评审访问权限。当前私有链接并非任何人均可直接操作。
+iFinD 本地调用成功，但 Cloudflare 线上验收返回 IFIND_HTTP_530。扶摇线上曾多次成功，本轮浏览器录制也返回真实字段，但同期匿名 HTTP 请求出现 HTTP_530，连通存在波动；根因未确认。失败时明确显示无可用证据，不静默补正常结论。真实模型和构造回归链路均可操作；演示附件与逐环境状态见提交索引。
 
 ## 目标用户和核心设计
 
@@ -94,6 +94,6 @@ pnpm build
 - 当前模型辅助审查不包含独立模型复核、人工一致性统计或大规模准确率验证。
 - 数据有效期由样本设置，默认行情 24 小时、年度财务 8760 小时，暂未按交易日历、停牌与盘中场景细分。过期检查采用保守策略。
 - 没有基金全链路核验、新闻公告原文抓取、iFinD 新闻公告与财务工具调用、实时流与跨币种转换。
-- 生产网站通过 Cloudflare Access 限制为该账户成员访问；提交评审前须配置适合评审的访问方式，并完成外部网络和线上接口验收。
+- 生产网站已公开演示，访客可以调用已配置接口并消耗账户额度；目前无完整滥用防护、按用户配额或生产级计费控制。接口配置只表示密钥存在，实际连通状态以每次请求为准。
 
 参见 [提交索引](docs/SUBMISSION.md)、[测试与验证](docs/TESTING.md)、[验证证据](docs/EVIDENCE.md)、[AI 使用记录](docs/AI_USAGE.md)、[演示说明](docs/DEMO.md)、[候选人确认](docs/CANDIDATE_CHECKLIST.md)。

@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-22",
+  "site": "https://agentlens-quality-platform.xcxufo0120.workers.dev/",
+  "access": "public demo, user approved Everyone -> Bypass",
+  "anonymousVerification": {"credentialsSent": false, "homepageStatus": 200, "configStatus": 200, "modelPostStatus": 200},
+  "financialData": {"fuyaoBrowser": "success in recorded operation", "fuyaoAnonymousHttp": "intermittent HTTP_530", "ifindProduction": "IFIND_HTTP_530", "localBothProviders": "success"},
+  "limits": "This is an agent-operated verification, not an independent reviewer acceptance. Raw responses and call identifiers are kept in local private evidence."
+}
